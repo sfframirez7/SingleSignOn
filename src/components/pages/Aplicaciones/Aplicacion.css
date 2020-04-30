@@ -1,0 +1,5 @@
+.aplicacion {
+    border-left: 4px solid #007BFF;
+    /* border-left: 4px solid #007BFF; */
+    transition: 0.2s;
+}
