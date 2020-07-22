@@ -8,6 +8,8 @@ import { SignInService } from '../../services/AuthService';
 import { AlertWarning } from '../../services/AlertService';
 import TipoAutenticacionEnum from '../../enums/Tipoautenticacion';
 
+import {ThemeContext} from '../context/theme-context'
+
 import { useHistory} from "react-router-dom";
 
 
@@ -72,11 +74,16 @@ const LoginCodigoEmpleado : React.FC <{}> = () => {
     }
   
 
-    return (
-        
-            <div className="col-10 col-md-6 col-lg-4 offset-1  offset-md-3 offset-lg-4 mt-4 py-4 card-box bg-white" id="cardLogin" >
+return (
 
-                <h3 className="font-weight-bold p-1">Código de empleado</h3>
+    
+    <ThemeContext.Consumer>
+        {context => (
+            
+        
+            <div className="col-10 col-md-6 col-lg-4 offset-1  offset-md-3 offset-lg-4 mt-4 py-4 card-box " style={{backgroundColor : context.theme.navBarBackGround}}  >
+
+                <h3 className="font-weight-bold p-1" style={{ color : context.theme.textColor}} >Código de empleado</h3>
 
                 <div className="alert alert-primary" role="alert">
                     <button type="button" className="close" data-dismiss="alert" aria-label="Close">
@@ -173,7 +180,9 @@ const LoginCodigoEmpleado : React.FC <{}> = () => {
                 </div>
 
         </div>
-
+    )}
+                            
+    </ThemeContext.Consumer>
     )
 }
 

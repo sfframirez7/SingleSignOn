@@ -3,15 +3,17 @@ import Loading from '../../common/Loading';
 import { GetAplicacionesService } from '../../../services/AplicacionService';
 import AplicacionModel from './../../../models/AplicacionModel';
 
+import {ThemeContext} from '../../context/theme-context'
+
 import Aplicacion from './Aplicacion';
 
 const Aplicaciones : React.FC = ()=> {
 
-    const setFocus                                  = useRef<any>(null)
-    const [loading, setLoading]                     = useState(false)
-    const [apliaciones, setApliaciones]             = useState<AplicacionModel[]>([])
-    const [Destacadas, setDestacadas]               = useState<AplicacionModel[]>([])
-    const [apliacionesLoaded, setApliacionesLoaded] = useState<AplicacionModel[]>([])
+    const setFocus                                      = useRef<any>(null)
+    const [loading, setLoading]                         = useState(false)
+    const [apliacionReciente, setApliacioneReciente]    = useState<AplicacionModel>()
+    const [apliaciones, setApliaciones]                 = useState<AplicacionModel[]>([])
+    const [apliacionesLoaded, setApliacionesLoaded]     = useState<AplicacionModel[]>([])
 
 
     useEffect(()=> {
@@ -26,15 +28,12 @@ const Aplicaciones : React.FC = ()=> {
         setLoading(true)
         GetAplicacionesService()
         .then((res) => {
-            var aplicaciones : AplicacionModel[] =  res.data
-            setApliaciones(aplicaciones)
-            setApliacionesLoaded(aplicaciones )
+            var _aplicaciones : AplicacionModel[] =  res.data
+            setApliaciones(_aplicaciones)
+            setApliacionesLoaded(_aplicaciones )
             setLoading(false)
+            GetAplicacionReciente(_aplicaciones)
             
-            setTimeout(() => {
-                filtrarDestacados()
-                
-            }, 3000);
 
         }).catch((err) => {
             setLoading(false)
@@ -63,46 +62,43 @@ const Aplicaciones : React.FC = ()=> {
 
         setApliaciones(data)
         setLoading(false)
-        filtrarDestacados()
+    }
+
+    function GetAplicacionReciente(_aplicaciones : AplicacionModel[])
+    {
+        var idAplicaionReciente =  parseInt(localStorage.getItem("IdAppReciente")  || "0")
+
+        if(idAplicaionReciente === 0)
+            return
+
+
+        var data = _aplicaciones.filter(app=> {
+            return app.Id === idAplicaionReciente
+         })
+
+         if(data && data.length > 0)
+            setApliacioneReciente(data[0])
+    }
+
+    function RemoveRecentAplicacion()
+    {
+        localStorage.removeItem("IdAppReciente")  
+        setApliacioneReciente(undefined)
     }
    
-
-    function filtrarDestacados()
-    {
-
-        var Ids = [1,2,3,4,5]
-        var data : AplicacionModel[]= []
-        Ids.map((id)=> {
-            var result  = apliaciones.filter(app=> {
-                console.log(app.Id === id);
-                return app.Id === id
-                
-             })
-
-            var result2 : AplicacionModel[] = result
-            
-            console.log(result2);
-
-            result2.map((r)=> {
-                console.log(r);
-               data.push(r)
-               console.log(r);
-
-            })
-
-
-        })
-        console.log(data);
-
-    }
     
     return (
 
+    <ThemeContext.Consumer>
+        {context=> (
         <div>
+            
+                
             <div className="row">
-             <div className="col-12 col-md-6 offset-md-3 text-center">
+             <div className="col-12 col-md-6 offset-md-3 col-lg-4 offset-lg-4 text-center">
                     <input 
-                        className="form-control form-control-sm" 
+                        className="form-control form-control-sm "
+                        style={{backgroundColor : context.theme.myBackGround , color : context.theme.textColor}} 
                         type="text" 
                         placeholder="buscar..."
                         ref={setFocus}
@@ -115,11 +111,37 @@ const Aplicaciones : React.FC = ()=> {
                     <Loading Loading={loading}/>
                 </div>
             </div>
+            
+                    
+          
 
-            <div className="row py-2 my-2">
+            <div className={"row  py-2 my-2 " + (apliacionReciente ? "" : "d-none") } >
                 
                 <div className="col-12 col-md-10 offset-md-1 col-lg-8 offset-lg-2 ">
-                <h3>Aplicaciones:</h3>
+                    <div className="d-flex justify-content-between">
+                        <h3  style={{color : context.theme.textColor}}>Reciente:</h3>
+                        <button className="btn" onClick={RemoveRecentAplicacion} style={{color : context.theme.textColor }}>
+                            <i className="fa fa-times" aria-hidden="true"></i>
+                        </button>
+                    </div>
+
+                    <div className="list-group">
+                        {apliacionReciente ? (
+                            <Aplicacion  aplicacionModel={apliacionReciente!}/>
+                        ) : null}
+
+                       
+                    </div>
+
+                </div>
+              
+            </div>
+            
+
+            <div className="row pt-1 pb-2 my-2">
+                
+                <div className="col-12 col-md-10 offset-md-1 col-lg-8 offset-lg-2 ">
+                <h3 className="font-weight-bold" style={{color : context.theme.textColor}}>Aplicaciones:</h3>
 
                     <div className="list-group">
 
@@ -151,10 +173,16 @@ const Aplicaciones : React.FC = ()=> {
             ) : (
                 null
             )}
-        </div>
+                
+            </div>
+        )}
+
+    </ThemeContext.Consumer>
     )
 
 }
+
+
 
 
 export default Aplicaciones

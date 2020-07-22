@@ -10,45 +10,25 @@ interface IState {
 }
 
 
+ const Loading : React.FC<IProps> =(props)=> {
 
-class Loading extends React.Component<IProps, IState> {
 
-    state : IState
-
-    constructor(props: IProps)
-    {
-        super(props)
-
-        this.state = {Loading : this.props.Loading}
-
-    }
-  
-    UNSAFE_componentWillReceiveProps(newProps : IProps)
-    {
-        this.setState({Loading: newProps.Loading});
+    if (props.Loading) {
+        return (
+            <div>
+                <div className="spinner-grow text-warning" role="status">
+                    <span className="sr-only">Loading...</span>
+                </div>
+                <div className={"text-center " + (props.Hidetext ? "d-none" : "")}>
+                    <p className="text-muted">Loading...</p>
+                </div>
+            </div>
+        )
+    } else {
+        return (null )
     }
 
     
-
-
-    render() {
-
-        if (this.state.Loading) {
-            return (
-                <div>
-                    <div className="spinner-grow text-warning" role="status">
-                        <span className="sr-only">Loading...</span>
-                    </div>
-                    <div className={"text-center " + (this.props.Hidetext ? "d-none" : "")}>
-                        <p className="text-muted">Loading...</p>
-                    </div>
-                </div>
-            )
-        } else {
-            return (null )
-        }
-
-    }
 
 }
 

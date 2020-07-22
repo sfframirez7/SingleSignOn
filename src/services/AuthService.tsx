@@ -51,5 +51,6 @@ export function IsLoggedIn()
 export function LogOut()
 {
     localStorage.removeItem("token")
+    localStorage.removeItem("IdAppReciente")
     window.location.reload()
 }

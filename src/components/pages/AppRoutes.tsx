@@ -15,7 +15,7 @@ function AppRoutes() {
 
             <div className="container">
 
-                <div className="row pt-1 mt-1 ">
+                <div className="row mt-1 ">
                     <div className="col text-center">
                         <Title title="Portal BP"/>
                     </div>

@@ -10,15 +10,24 @@ import {
 import Title from './../../common/Title';
 import TipoAutenticacionEnum from '../../../enums/Tipoautenticacion';
 
+import {ThemeContext} from '../../context/theme-context'
+
 function WelcomePage() {
     
     return (
         <div>
-            <nav className="navbar navbar-light bg-light my-card">
-                <span className="navbar-brand font-weight-bolder m-0 p-0">
-                    Portal BP
-                </span>
-            </nav>
+            <ThemeContext.Consumer>
+                {context => (
+                    <nav className="navbar navbar-light  my-card " style={{backgroundColor : context.theme.navBarBackGround}}>
+                        <span className="navbar-brand font-weight-bolder m-0 p-0" style={{color : context.theme.textColor}}> 
+                            Portal BP
+                        </span>
+                    </nav>
+
+            )}
+                        
+            </ThemeContext.Consumer>
+
 
             <div className="container">
 

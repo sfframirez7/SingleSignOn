@@ -10,3 +10,8 @@ body {
 .my-bg {
     background-color: #E8EAED;
 }
+
+#root {
+    min-width: 100%;
+    min-height: 100%;
+}

@@ -4,7 +4,7 @@ import axios from 'axios'
 var baseULR = ""
 
 if (process.env.NODE_ENV === "production"){
-    baseULR = "http://localhost:49212/api"
+    baseULR = "http://des-aplicafe03:83/api"
 }
 
 else if (process.env.NODE_ENV === "test"){
